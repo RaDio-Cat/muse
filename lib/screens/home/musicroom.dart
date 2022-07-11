@@ -32,7 +32,7 @@ class _MusicRoomState extends State<MusicRoom> {
                 height: 70,
                 width: 70,
                 child: InkWell(child: Icon(Icons.favorite_border),
-                highlightColor: Colors.transparent,
+                highlightColor: Colors.green,
                 onTap: (){
                   //go back to previous page
                 },),
