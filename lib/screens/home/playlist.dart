@@ -11,12 +11,20 @@ class _PlaylistLayoutState extends State<PlaylistLayout> {
   @override
   Widget build(BuildContext context) {
     return 
-      Scaffold(backgroundColor: Colors.purple[900],
+      Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        elevation: 10,
-        backgroundColor: Colors.deepPurple[800],
+        backgroundColor: Colors.transparent,
         title: Text('Playlist Name',
         style: TextStyle(color: Colors. amber),),
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(colors: [Colors.deepPurpleAccent, Colors.black],
+          stops: [0.01, 1],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,),
+        ),
       ),);
     
   }

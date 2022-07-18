@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:muse/screens/authenticate/signin.dart';
+import 'package:muse/screens/home/musicroom.dart';
 import 'package:muse/screens/home/playlist.dart';
 import 'package:muse/screens/wrapper.dart';
 
@@ -13,7 +15,43 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Wrapper(),
+      debugShowCheckedModeBanner: false,
+     // darkTheme:ThemeData(
+       // colorSchemeSeed: Colors.purple,
+        //brightness: Brightness.light,
+        //useMaterial3: true,
+        
+      //),
+      theme: ThemeData(
+        colorSchemeSeed: Colors.purple,
+        brightness:Brightness.light,
+        appBarTheme: AppBarTheme(
+          color: Colors.purple
+        ),
+        iconTheme: IconThemeData(color: Colors.purple),
+      ),
+      home: SignIn(),
+    );
+  }
+}
+
+
+class ThemeTest extends StatelessWidget {
+  const ThemeTest({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Con Te Partiro'),
+      ),
+      body: Center(
+        child:Text('Andromeda'),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: (){},
+      ),
     );
   }
 }
