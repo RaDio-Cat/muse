@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:muse/screens/authenticate/intro.dart';
+import 'package:muse/screens/authenticate/register.dart';
 import 'package:muse/screens/authenticate/signin.dart';
 import 'package:muse/screens/home/musicroom.dart';
 import 'package:muse/screens/home/playlist.dart';
@@ -23,6 +26,7 @@ class MyApp extends StatelessWidget {
         
       //),
       theme: ThemeData(
+        textTheme:GoogleFonts.josefinSansTextTheme(Theme.of(context).textTheme),
         colorSchemeSeed: Colors.purple,
         brightness:Brightness.light,
         appBarTheme: AppBarTheme(
@@ -30,7 +34,7 @@ class MyApp extends StatelessWidget {
         ),
         iconTheme: IconThemeData(color: Colors.purple),
       ),
-      home: SignIn(),
+      home: IntroPage(),
     );
   }
 }

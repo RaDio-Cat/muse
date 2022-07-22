@@ -3,14 +3,14 @@ import 'package:muse/tools/customfont.dart';
 import 'package:muse/tools/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class SignIn extends StatefulWidget {
-  const SignIn({Key? key}) : super(key: key);
+class Register extends StatefulWidget {
+  const Register({Key? key}) : super(key: key);
 
   @override
-  State<SignIn> createState() => _SignInState();
+  State<Register> createState() => _RegisterState();
 }
 
-class _SignInState extends State<SignIn> {
+class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -47,9 +47,26 @@ class _SignInState extends State<SignIn> {
                               textAlign: TextAlign.start,
                               decoration: InputDecoration(
                                 border: InputBorder.none,
-                                hintText: 'Email or username',
+                                hintText: 'Email ',
                                 hintStyle: mbodytext,
                                 prefixIcon: Icon(Icons.mail,
+                                color: Colors.purple[100],),
+                              ),
+                              keyboardType: TextInputType.emailAddress,
+                              textInputAction: TextInputAction.next,
+                            )),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric( vertical: 10),
+                          child: Neumorph(
+                            child: TextField(
+                              textAlignVertical: TextAlignVertical.center,
+                              textAlign: TextAlign.start,
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: 'Username',
+                                hintStyle: mbodytext,
+                                prefixIcon: Icon(Icons.person,
                                 color: Colors.purple[100],),
                               ),
                               keyboardType: TextInputType.emailAddress,
@@ -81,30 +98,30 @@ class _SignInState extends State<SignIn> {
                         SizedBox(
                           child: InkWell(
                             onTap: () {
-                              //move to registration page
+                              //move to login page
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text('Create an account',
+                              child: Text('Already have an account?',
                               style: mbodytext,),
                             ),
                           ),
                         )],
                       ),
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   SizedBox(
                     height:100,
                   ),
                   Container(
-                  width: double.infinity,
                   decoration:BoxDecoration(
                     color: Colors.lightBlue,
                     borderRadius: BorderRadiusDirectional.circular(16)
                   ) ,
                 child: TextButton(onPressed: () {
-                  //login
-                }, child: Text('Login',
+                  //create an account
+                }, child: Text('Next',
                 style: mbodytext),
                 ),
                 )],

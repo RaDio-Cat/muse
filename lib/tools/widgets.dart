@@ -51,3 +51,31 @@ class BackgroundImage extends StatelessWidget {
       ),);
   }
 }
+
+class Neumorph extends StatelessWidget {
+  final child;
+  const Neumorph({Key? key, required this.child}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 45,
+      padding: EdgeInsets.all(12),
+      child: Center(child: child,),
+        decoration: BoxDecoration(
+          color: Colors.black54,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [BoxShadow(
+            color: Colors.purple.shade300,
+            blurRadius: 15,
+            offset: Offset(5,5) 
+          ),
+          BoxShadow(
+            color: Colors.purple.shade300,
+            blurRadius: 15,
+            offset: Offset(-5,-5) 
+          )
+          ]
+        ),);
+  }
+}
