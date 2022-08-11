@@ -28,6 +28,7 @@ class _MusicRoomState extends State<MusicRoom> {
                 highlightColor: Colors.transparent,
                 onTap: (){
                   //go back to previous page
+                  Navigator.pop(context);
                 },),
               ),
               SizedBox(
@@ -46,7 +47,7 @@ class _MusicRoomState extends State<MusicRoom> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
              Padding(
-               padding: const EdgeInsets.all(8.0),
+               padding: const EdgeInsets.all(20.0),
                child: Text('H u m b l e',
                style: TextStyle(color: Colors.deepPurpleAccent),),
              ),
@@ -57,7 +58,7 @@ class _MusicRoomState extends State<MusicRoom> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
              Padding(
-               padding: const EdgeInsets.all(8.0),
+               padding: const EdgeInsets.all(20.0),
                child: Text('Kendrick Lamar',
                style: TextStyle(color: Colors.deepPurpleAccent),),
              ),

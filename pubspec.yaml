@@ -38,6 +38,10 @@ dependencies:
   percent_indicator: ^4.2.2
   audio_video_progress_bar: ^0.10.0
   google_fonts: ^3.0.1
+  firebase_auth: ^3.6.2
+  cloud_firestore: ^3.4.3
+  firebase_storage: ^10.3.4
+  firebase_core: ^1.20.0
 
 dev_dependencies:
   flutter_test:

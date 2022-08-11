@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:muse/screens/home/musicroom.dart';
 import 'package:muse/tools/customfont.dart';
 import 'package:muse/tools/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -104,6 +105,7 @@ class _SignInState extends State<SignIn> {
                   ) ,
                 child: TextButton(onPressed: () {
                   //login
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => MusicRoom()));
                 }, child: Text('Login',
                 style: mbodytext),
                 ),
