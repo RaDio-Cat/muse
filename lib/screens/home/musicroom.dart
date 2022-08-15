@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:muse/screens/authenticate/intro.dart';
 import 'package:muse/tools/widgets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MusicRoom extends StatefulWidget {
   const MusicRoom({Key? key}) : super(key: key);
@@ -26,9 +28,16 @@ class _MusicRoomState extends State<MusicRoom> {
                 width: 70,
                 child: InkWell(child: const Icon(Icons.arrow_back_ios_new_outlined),
                 highlightColor: Colors.transparent,
-                onTap: (){
+                onTap: ()async {
                   //go back to previous page
-                  Navigator.pop(context);
+                    await FirebaseAuth.instance.signOut();
+                    print('user logged out');
+                    Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  IntroPage()));
+                 // Navigator.pop(context);
                 },),
               ),
               SizedBox(

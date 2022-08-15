@@ -55,7 +55,7 @@ class _IntroPageState extends State<IntroPage> {
                         child: OutlinedButton(onPressed: () {
                           // go to login page
                           Navigator.push(context, MaterialPageRoute(builder: (context) => SignIn()));
-                        }, child: Text('Sign in',
+                        }, child: Text('Streamer Sign in',
                         style: mbodytext),
                         style: OutlinedButton.styleFrom(
                           shape: RoundedRectangleBorder(
@@ -80,7 +80,7 @@ class _IntroPageState extends State<IntroPage> {
                         child: OutlinedButton(onPressed: () {
                           //go to registration page
                           Navigator.push(context, MaterialPageRoute(builder: (context) => Register()));
-                        }, child: Text('Sign up',
+                        }, child: Text('Streamer Sign up',
                         style: mbodytext),
                         style: OutlinedButton.styleFrom(
                           shape: RoundedRectangleBorder(
@@ -104,7 +104,32 @@ class _IntroPageState extends State<IntroPage> {
                         child: OutlinedButton(onPressed: () {
                           //go to artist registration page
                           Navigator.push(context, MaterialPageRoute(builder: (context) => ArtistRegister()));
-                        }, child: Text('Become a muse artist',
+                        }, child: Text('Artist Sign Up',
+                        style: mbodytext),
+                        style: OutlinedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          side: BorderSide(width:2, color: Colors.white)
+                        ),
+                        ),
+                      ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        width: double.infinity,
+                        decoration:BoxDecoration(
+                          color: Colors.lightBlue,
+                          borderRadius: BorderRadiusDirectional.circular(25)
+                        ) ,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal:5.0),
+                        child: OutlinedButton(onPressed: () {
+                          //go to artist registration page
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => ArtistRegister()));
+                        }, child: Text('Artist Sign In',
                         style: mbodytext),
                         style: OutlinedButton.styleFrom(
                           shape: RoundedRectangleBorder(

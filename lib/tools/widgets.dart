@@ -59,9 +59,7 @@ class Neumorph extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 45,
-      padding: EdgeInsets.all(12),
-      child: Center(child: child,),
+      child: child,
         decoration: BoxDecoration(
           color: Colors.black54,
           borderRadius: BorderRadius.circular(12),

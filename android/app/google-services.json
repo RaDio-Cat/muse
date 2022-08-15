@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "2095207253",
+    "project_id": "muse-17f71",
+    "storage_bucket": "muse-17f71.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:2095207253:android:1969d0fd0ecbf2a0ea95dc",
+        "android_client_info": {
+          "package_name": "com.domelevo.muse"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "2095207253-qcjfs3gej72eoamu48ol5q6j2ccbucln.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3xArzTyih1xkG23ECx3OinaxvUluVubU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "2095207253-qcjfs3gej72eoamu48ol5q6j2ccbucln.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "2095207253-anhgem99su0tpvabim5sfofvinobca98.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.muse"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
