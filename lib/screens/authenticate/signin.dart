@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:muse/screens/authenticate/register.dart';
 import 'package:muse/screens/home/musicroom.dart';
+import 'package:muse/services/usermanagement.dart';
 import 'package:muse/tools/customfont.dart';
 import 'package:muse/tools/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -177,11 +178,12 @@ class _SignInState extends State<SignIn> {
                                                   email: _email.text,
                                                   password: _password.text);
                                       //go to home page
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  MusicRoom()));
+                                      await UserManagement().directHomepage;
+                                      // Navigator.push(
+                                      //     context,
+                                      //     MaterialPageRoute(
+                                      //         builder: (context) =>
+                                      //             MusicRoom()));
                                     } on FirebaseAuthException catch (e) {
                                       if (e.code == 'user not found') {
                                         print('No user has this email.');

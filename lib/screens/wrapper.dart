@@ -18,7 +18,7 @@ class Wrapper extends StatelessWidget {
           if (user == null){
             return IntroPage();
           }
-          return Home();
+          return MusicRoom();
         }else{
           return Scaffold(
             body: Center(

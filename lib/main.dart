@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:muse/screens/authenticate/intro.dart';
 import 'package:muse/screens/authenticate/register.dart';
 import 'package:muse/screens/authenticate/signin.dart';
+import 'package:muse/screens/home/artist/addsongs.dart';
+import 'package:muse/screens/home/artist/artisthome.dart';
 import 'package:muse/screens/home/musicroom.dart';
 import 'package:muse/screens/home/playlist.dart';
 import 'package:muse/screens/wrapper.dart';
@@ -41,7 +43,7 @@ class MyApp extends StatelessWidget {
         ),
         iconTheme: IconThemeData(color: Colors.purple),
       ),
-      home: Wrapper(),
+      home: ArtistHome(),
     );
   }
 }
