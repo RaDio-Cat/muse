@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:muse/screens/authenticate/register.dart';
@@ -6,6 +7,9 @@ import 'package:muse/services/usermanagement.dart';
 import 'package:muse/tools/customfont.dart';
 import 'package:muse/tools/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../home/artist/artisthome.dart';
+import '../home/home.dart';
 
 class SignIn extends StatefulWidget {
   SignIn({Key? key}) : super(key: key);
@@ -177,8 +181,32 @@ class _SignInState extends State<SignIn> {
                                               .signInWithEmailAndPassword(
                                                   email: _email.text,
                                                   password: _password.text);
+                                      print('user signed in');
                                       //go to home page
-                                      await UserManagement().directHomepage;
+                                      User? currentUser =
+                                          FirebaseAuth.instance.currentUser;
+                                      return FirebaseFirestore.instance
+                                          .collection('/users')
+                                          .doc(currentUser!.uid)
+                                          .get()
+                                          .then((snapshot) {
+                                        if (snapshot.exists) {
+                                          if (snapshot.data()!['role'] ==
+                                              'artist') {
+                                            Navigator.of(context).push(
+                                                new MaterialPageRoute(
+                                                    builder: (BuildContext
+                                                            context) =>
+                                                        new ArtistHome()));
+                                          } else {
+                                            Navigator.of(context).push(
+                                                new MaterialPageRoute(
+                                                    builder: (BuildContext
+                                                            context) =>
+                                                        new Home()));
+                                          }
+                                        }
+                                      });
                                       // Navigator.push(
                                       //     context,
                                       //     MaterialPageRoute(

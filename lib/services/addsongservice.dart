@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 
 class SongService{
-  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   User? currentUser = FirebaseAuth.instance.currentUser; 
   
 

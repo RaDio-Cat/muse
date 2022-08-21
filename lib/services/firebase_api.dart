@@ -12,5 +12,16 @@ class FirebaseApi{
     return null;
   }
     }
+
+     static UploadTask? uploadMusicFile(String destination, File file) {
+    try {
+      final reference = FirebaseStorage.instance.ref(destination);
+    return reference.putFile(file, SettableMetadata(
+      contentType: "audio/mpeg",
+    ));
+  } on FirebaseException catch (e) {
+    return null;
+  }
+    }
   }
     

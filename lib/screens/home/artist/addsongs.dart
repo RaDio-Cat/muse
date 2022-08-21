@@ -33,7 +33,7 @@ class _AddSongsState extends State<AddSongs> {
   UploadTask? imgtask;
   File? file;
   File? image;
-  String? genre = 'f';
+  String? genre = '';
   String dropdownValue = 'Select Song Genre';
   String? sname = '';
   @override
@@ -148,9 +148,10 @@ class _AddSongsState extends State<AddSongs> {
                                             onChanged: (String? newvalue) {
                                               setState(() {
                                                 genre = newvalue;
+                                                print('genre selected');
                                               });
                                             },
-                                            // value: genreItems[0] as String,
+                                            //value: genre,
                                             isExpanded: false,
                                             hint: const Text('Select genre'),
                                           )
@@ -253,7 +254,8 @@ class _AddSongsState extends State<AddSongs> {
                                         songTostorage();
                                         Fluttertoast.showToast(
                                             msg: 'Category added');
-                                        Navigator.pop(context);
+                                            print('we got em boys');
+                                       // Navigator.pop(context);
                                       },
                                       child:
                                           Text('Upload File', style: mbodytext),
@@ -296,10 +298,11 @@ class _AddSongsState extends State<AddSongs> {
   }
 
   Future selectMusicFile() async {
-    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+    final result = await FilePicker.platform.pickFiles(allowMultiple: false, type: FileType.audio);
     if (result == null) return;
     final path = result.files.single.path!;
     setState(() => file = File(path));
+    print('song selected');
   }
 
   Future selectImage() async {
@@ -307,6 +310,7 @@ class _AddSongsState extends State<AddSongs> {
     if (result == null) return;
     final imagepath = result.files.single.path!;
     setState(() => image = File(imagepath));
+    print('image selected');
   }
 
   Future songTostorage() async {
@@ -315,7 +319,7 @@ class _AddSongsState extends State<AddSongs> {
       if (file == null) return;
       final filename = basename(file!.path);
       final destination = 'tracks/$filename';
-      task = FirebaseApi.uploadFile(destination, file!);
+      task = FirebaseApi.uploadMusicFile(destination, file!);
       setState(() {});
       if (task == null) return;
       final snapshot = await task!.whenComplete(() {});
@@ -329,7 +333,7 @@ class _AddSongsState extends State<AddSongs> {
       setState(() {});
       if (imgtask == null) return;
       final imgsnapshot = await task!.whenComplete(() {});
-      final imgurlDownload = await snapshot.ref.getDownloadURL();
+      final imgurlDownload = await imgsnapshot.ref.getDownloadURL();
 
       //test if it worked
       print('link: $urlDownload');

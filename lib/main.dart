@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
         ),
         iconTheme: IconThemeData(color: Colors.purple),
       ),
-      home: ArtistHome(),
+      home: IntroPage(),
     );
   }
 }

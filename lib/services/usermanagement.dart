@@ -15,15 +15,12 @@ class UserManagement {
         .then((snapshot) {
       if (snapshot.docs[0].exists) {
         if (snapshot.docs[0].data()['role'] == 'artist') {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => ArtistHome()));
+          Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new ArtistHome()));
         }
         else{
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Home()));
+          Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new Home()));
         }
       }
     });
-    ;
   }
 }

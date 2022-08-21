@@ -1,9 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:muse/screens/home/artist/addsongs.dart';
 import 'package:muse/tools/customfont.dart';
+
+import '../../authenticate/intro.dart';
 
 class ArtistHome extends StatefulWidget {
   const ArtistHome({Key? key}) : super(key: key);
@@ -28,6 +31,12 @@ class _ArtistHomeState extends State<ArtistHome> {
         Scaffold(extendBodyBehindAppBar: true,
         backgroundColor: Colors.transparent,
       appBar: AppBar(
+        leading: InkWell(
+          onTap: ()async {
+            
+          },
+          child: Icon(Icons.arrow_back_ios)
+        ),
         backgroundColor: Colors.transparent,
         title: Text('Home',
         style: TextStyle(color: Colors. amber),),
@@ -79,7 +88,7 @@ class _ArtistHomeState extends State<ArtistHome> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  AddSongs()));
+                                                  const AddSongs()));
                     },
                     child: Container(
                       decoration: BoxDecoration(
@@ -155,8 +164,15 @@ class _ArtistHomeState extends State<ArtistHome> {
                   shadowColor: Colors.amberAccent,
                   
                   child: InkWell(
-                    onTap:() {
+                    onTap:()async {
                       //show list of uploads
+                      await FirebaseAuth.instance.signOut();
+                    print('user logged out');
+                    Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  IntroPage()));
                     },
                     child: Container(
                       decoration: BoxDecoration(
