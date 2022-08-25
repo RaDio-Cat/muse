@@ -16,7 +16,7 @@ class SongService{
     required String song,
     required String thumbnail,
   }){
-    String? artistName =currentUser as String;
+    String? artistName =currentUser!.uid;
 
     return _firestore.collection('tracks').add({
       'name': songName,

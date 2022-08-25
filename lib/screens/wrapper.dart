@@ -4,6 +4,8 @@ import 'package:muse/screens/authenticate/intro.dart';
 import 'package:muse/screens/authenticate/register.dart';
 import 'package:muse/screens/home/home.dart';
 import 'package:muse/screens/home/musicroom.dart';
+
+import '../services/usermanagement.dart';
 class Wrapper extends StatelessWidget {
   const Wrapper({Key? key}) : super(key: key);
   
@@ -18,7 +20,7 @@ class Wrapper extends StatelessWidget {
           if (user == null){
             return IntroPage();
           }
-          return MusicRoom();
+          return UserManagement().directHomepage(context);
         }else{
           return Scaffold(
             body: Center(

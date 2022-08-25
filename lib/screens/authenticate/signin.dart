@@ -183,30 +183,7 @@ class _SignInState extends State<SignIn> {
                                                   password: _password.text);
                                       print('user signed in');
                                       //go to home page
-                                      User? currentUser =
-                                          FirebaseAuth.instance.currentUser;
-                                      return FirebaseFirestore.instance
-                                          .collection('/users')
-                                          .doc(currentUser!.uid)
-                                          .get()
-                                          .then((snapshot) {
-                                        if (snapshot.exists) {
-                                          if (snapshot.data()!['role'] ==
-                                              'artist') {
-                                            Navigator.of(context).push(
-                                                new MaterialPageRoute(
-                                                    builder: (BuildContext
-                                                            context) =>
-                                                        new ArtistHome()));
-                                          } else {
-                                            Navigator.of(context).push(
-                                                new MaterialPageRoute(
-                                                    builder: (BuildContext
-                                                            context) =>
-                                                        new Home()));
-                                          }
-                                        }
-                                      });
+                                      await UserManagement().directHomepage(context);
                                       // Navigator.push(
                                       //     context,
                                       //     MaterialPageRoute(

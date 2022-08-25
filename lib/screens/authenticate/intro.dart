@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:muse/screens/authenticate/artregister.dart';
 import 'package:muse/screens/authenticate/register.dart';
 import 'package:muse/screens/authenticate/signin.dart';
 import 'package:muse/tools/customfont.dart';

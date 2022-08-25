@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
         ),
         iconTheme: IconThemeData(color: Colors.purple),
       ),
-      home: IntroPage(),
+      home: Wrapper(),
     );
   }
 }

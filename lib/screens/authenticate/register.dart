@@ -7,6 +7,8 @@ import 'package:muse/tools/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../services/usermanagement.dart';
+
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
 
@@ -20,12 +22,14 @@ class _RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
   //Text editing controller will be used for authentication purposes
   TextEditingController _email = TextEditingController();
+  TextEditingController _wallet = TextEditingController();
   TextEditingController _username = TextEditingController();
   TextEditingController _password = TextEditingController();
   //String values will be used for validation process
   String email = "";
   String username = "";
   String password = "";
+  String wallet = "";
   //radio button selection
   String role = '';
 
@@ -155,7 +159,7 @@ class _RegisterState extends State<Register> {
                                     },
                                     controller: _password,
                                     keyboardType: TextInputType.emailAddress,
-                                    textInputAction: TextInputAction.done,
+                                    textInputAction: TextInputAction.next,
                                     obscureText: hidePassword,
                                   ),
                                   trailing: IconButton(
@@ -165,6 +169,34 @@ class _RegisterState extends State<Register> {
                                         });
                                       },
                                       icon: Icon(Icons.remove_red_eye)),
+                                )),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                child: Neumorph(
+                                    child: ListTile(
+                                  title: TextFormField(
+                                    textAlignVertical: TextAlignVertical.center,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: 'MetaMask Address',
+                                      hintStyle: mbodytext,
+                                      prefixIcon: Icon(
+                                        Icons.wallet,
+                                        color: Colors.purple[100],
+                                      ),
+                                    ),
+                                    validator: (val) =>
+                                        val!.isEmpty ? 'Email required' : null,
+                                    onChanged: (val) {
+                                      //email string is assigned to val for validation process
+                                      setState(() => wallet = val);
+                                    },
+                                    controller: _wallet,
+                                    keyboardType: TextInputType.emailAddress,
+                                    textInputAction: TextInputAction.done,
+                                  ),
                                 )),
                               ),
                               Row(
@@ -247,14 +279,16 @@ class _RegisterState extends State<Register> {
                                         _username.text,
                                         _email.text,
                                         role,
+                                        _wallet.text,
                                       );
                                       print('data added');
                                       //navigate to hompepage
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  MusicRoom()));
+                                       await UserManagement().directHomepage(context);
+                                      // Navigator.push(
+                                      //     context,
+                                      //     MaterialPageRoute(
+                                      //         builder: (context) =>
+                                      //             MusicRoom()));
                                     } on FirebaseAuthException catch (e) {
                                       if (e.code == 'weak-password') {
                                         print(
