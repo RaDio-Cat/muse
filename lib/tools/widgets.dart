@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:muse/screens/home/musicroom.dart';
 import 'package:muse/services/usermanagement.dart';
 
 class BackBox extends StatelessWidget {
@@ -93,6 +94,7 @@ class _SongListState extends State<SongList> {
   String artistname = '';
   final Stream<QuerySnapshot> _songStream =
       FirebaseFirestore.instance.collection('tracks').snapshots();
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -114,24 +116,41 @@ class _SongListState extends State<SongList> {
                 Map<String, dynamic> data =
                     document.data()! as Map<String, dynamic>;
                 String royal = data['royalty holder'];
+
+                String song = data['song'];
+                String singer = artistname;
+                String thumbnail = data['image'];
+                String songname = data['name'];
+
                 // final singer = UserManagement().retrieveArtistName(royalty: royal).toString();
                 return Card(
                   color: Colors.grey[200],
-                  child: CustomListTile(
-                    onTap: (){
-                      //open music room and send necessary data
-                    },
-                      title: data['name'],
-                      subtitle: FutureBuilder(
+                  child: MyCustomListTile(
+                    title: data['name'],
+                    subtitle: FutureBuilder(
                         future: retrieveArtistName(royalty: royal),
                         builder: (context, snapshot) {
-                          if(snapshot.connectionState == ConnectionState.done){
+                          if (snapshot.connectionState ==
+                              ConnectionState.done) {
                             return Text(artistname);
-                          }else{
+                          } else {
                             return Text('Unknown Artist');
                           }
                         }),
-                      leading: data['image']),
+                    leading: data['image'],
+                    onTap: () {
+                      //open music room and send necessary data
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MusicRoom(
+                                    singer: artistname,
+                                    song: data['song'],
+                                    songname: data['name'],
+                                    thumbnail: data['image'],
+                                  )));
+                    },
+                  ),
                 );
               }).toList(),
             );
@@ -143,58 +162,76 @@ class _SongListState extends State<SongList> {
         });
   }
 
-  retrieveArtistName({required String royalty}) async  {
+  retrieveArtistName({required String royalty}) async {
     await FirebaseFirestore.instance
-    .collection('users')
-    .doc(royalty)
-    .get()
-    .then((snapshot) {
-      if(snapshot.exists) {
-         artistname = snapshot.data()!['username'];
+        .collection('users')
+        .doc(royalty)
+        .get()
+        .then((snapshot) {
+      if (snapshot.exists) {
+        artistname = snapshot.data()!['username'];
         return artistname;
-      }
-      else{
+      } else {
         return null;
       }
     });
   }
-
 }
 
 
 
-Widget CustomListTile(
-    {required String title,
-    required Widget subtitle,
-    required String leading,
-    onTap}) {
-  return Container(
-    child: Row(
-      children: [
-        Container(
-          height: 80,
-          width: 80,
-          child: Image.network(leading,
-          fit: BoxFit.contain,),
-        ),
-        SizedBox(
-          width: 10,
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            subtitle,
-          ],
-        )
-      ],
-    ),
-  );
-}
+class MyCustomListTile extends StatelessWidget {
+  final VoidCallback onTap;
+  final String leading;
+  final String title;
+  final Widget subtitle;
+  const MyCustomListTile(
+      {Key? key,
+      required this.onTap,
+      required this.leading,
+      required this.title,
+      required this.subtitle})
+      : super(key: key);
 
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        onTap();
+      },
+      child: Container(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              Container(
+                height: 80,
+                width: 80,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  image: DecorationImage(image: NetworkImage(leading),),
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  subtitle,
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

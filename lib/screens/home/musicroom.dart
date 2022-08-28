@@ -26,7 +26,7 @@ class _MusicRoomState extends State<MusicRoom> {
     return Stack(
       children: [
         BackgroundImage(
-          image: AssetImage('lib/images/humble.jpg'),
+          image: NetworkImage(widget.thumbnail),
         ),
         Scaffold(
           backgroundColor: Colors.transparent.withOpacity(0.5),
@@ -45,13 +45,8 @@ class _MusicRoomState extends State<MusicRoom> {
                         highlightColor: Colors.transparent,
                         onTap: () async {
                           //go back to previous page
-                          await FirebaseAuth.instance.signOut();
-                          print('user logged out');
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => IntroPage()));
-                          // Navigator.pop(context);
+
+                           Navigator.pop(context);
                         },
                       ),
                     ),
@@ -75,14 +70,14 @@ class _MusicRoomState extends State<MusicRoom> {
                     Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: Text(
-                        'H u m b l e',
+                        widget.songname,
                         style: TextStyle(color: Colors.deepPurpleAccent),
                       ),
                     ),
                   ],
                 ),
                 //image, artist and song name
-                BackBox(child: Image.asset('lib/images/humble.jpg')),
+                BackBox(child: Image.network(widget.thumbnail)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -90,7 +85,7 @@ class _MusicRoomState extends State<MusicRoom> {
                     Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: Text(
-                        'Kendrick Lamar',
+                        widget.singer,
                         style: TextStyle(color: Colors.deepPurpleAccent),
                       ),
                     ),

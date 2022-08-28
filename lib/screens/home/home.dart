@@ -44,10 +44,11 @@ class Home extends StatelessWidget {
             padding:
                 const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
             child: Text(
-              'Items',
+              'Songs',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 letterSpacing: 3.0,
+                color: Colors.amber,
               ),
             ),
           ),

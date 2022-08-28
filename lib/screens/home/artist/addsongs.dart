@@ -40,7 +40,7 @@ class _AddSongsState extends State<AddSongs> {
   Widget build(BuildContext context) {
     final fileName = file != null ? basename(file!.path) : 'No file selected';
     final imgfileName =
-        file != null ? basename(image!.path) : 'No file selected';
+        image != null ? basename(image!.path) : 'No file selected';
     return Stack(
       children: [
         Container(
@@ -332,7 +332,7 @@ class _AddSongsState extends State<AddSongs> {
       imgtask = FirebaseApi.uploadFile(imgdestination, image!);
       setState(() {});
       if (imgtask == null) return;
-      final imgsnapshot = await task!.whenComplete(() {});
+      final imgsnapshot = await imgtask!.whenComplete(() {});
       final imgurlDownload = await imgsnapshot.ref.getDownloadURL();
 
       //test if it worked
