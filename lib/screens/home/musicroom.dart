@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:muse/screens/authenticate/intro.dart';
+import 'package:muse/tools/customfont.dart';
 import 'package:muse/tools/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class MusicRoom extends StatefulWidget {
   final thumbnail;
@@ -21,6 +23,47 @@ class MusicRoom extends StatefulWidget {
 }
 
 class _MusicRoomState extends State<MusicRoom> {
+  final audioPlayer = AudioPlayer();
+  bool isPlaying = false;
+  Duration duration = Duration.zero;
+  Duration position = Duration.zero;
+
+  @override
+  void initState(){
+    super.initState();
+
+    setAudio();
+
+    //Listen for song state
+    audioPlayer.onPlayerStateChanged.listen((state) {
+      setState(() {
+        isPlaying = state == PlayerState.playing;
+      });
+     });
+    // audio duration
+    audioPlayer.onDurationChanged.listen((newDuration) { 
+      setState(() {
+        duration = newDuration;
+      });
+    });
+    //slider position monitoring
+    audioPlayer.onPositionChanged.listen((newPosition) {
+      setState(() {
+        position = newPosition;
+      });
+    });
+  }
+
+  Future setAudio() async {
+    audioPlayer.setSourceUrl(widget.song);
+  }
+
+  @override
+  void dispose() {
+    audioPlayer.dispose();
+    super.dispose;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -46,7 +89,7 @@ class _MusicRoomState extends State<MusicRoom> {
                         onTap: () async {
                           //go back to previous page
 
-                           Navigator.pop(context);
+                          Navigator.pop(context);
                         },
                       ),
                     ),
@@ -91,54 +134,101 @@ class _MusicRoomState extends State<MusicRoom> {
                     ),
                   ],
                 ),
-                //controls
-                SizedBox(
-                  height: 80,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal:20.0),
+                  child: Column(
                     children: [
-                      ClipOval(
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            onTap: () {
-                              // previous song
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Icon(Icons.skip_previous),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical:20.0),
+                        child: Column(
+                          children: [
+                            Slider(
+                            min: 0,
+                            max: duration.inSeconds.toDouble(),
+                            value: position.inSeconds.toDouble(),
+                            onChanged: (value) async {
+                              //control song position
+                              final position = Duration(seconds: value.toInt());
+                              await audioPlayer.seek(position);
+
+                              await audioPlayer.resume();
+                            }),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('0:00',
+                                style: mbodytext,),
+                                Text('3:43',
+                                style: mbodytext,),
+                                // Text(formatTime(position)),
+                                // Text(formatTime(duration - position)),
+                              ],
                             ),
-                          ),
+                          ],
                         ),
                       ),
-                      ClipOval(
-                        child: Material(
-                          //color: Colors.blue,
-                          child: InkWell(
-                            onTap: () {
-                              // pause and play song
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(20.0),
-                              child: Icon(Icons.pause),
+                  //controls
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: SizedBox(
+                      height: 80,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ClipOval(
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                onTap: () {
+                                  // previous song
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Icon(Icons.skip_previous),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                          ClipOval(
+                            child: Material(
+                              //color: Colors.blue,
+                              child: InkWell(
+                                onTap: () async{
+                                  // pause and play song
+                                  if (isPlaying){
+                                    //pause
+                                    await audioPlayer.pause();
+                                  }else{
+                                    //play
+                                    await audioPlayer.resume();
+                                  }
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
+                                ),
+                              ),
+                            ),
+                          ),
+                          ClipOval(
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                onTap: () {
+                                  // next song
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Icon(Icons.skip_next),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
                       ),
-                      ClipOval(
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            onTap: () {
-                              // next song
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Icon(Icons.skip_next),
-                            ),
-                          ),
-                        ),
-                      )
+                    ),
+                  )
                     ],
                   ),
                 )
