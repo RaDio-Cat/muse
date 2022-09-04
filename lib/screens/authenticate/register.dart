@@ -22,7 +22,6 @@ class _RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
   //Text editing controller will be used for authentication purposes
   TextEditingController _email = TextEditingController();
-  TextEditingController _wallet = TextEditingController();
   TextEditingController _username = TextEditingController();
   TextEditingController _password = TextEditingController();
   //String values will be used for validation process
@@ -169,34 +168,6 @@ class _RegisterState extends State<Register> {
                                         });
                                       },
                                       icon: Icon(Icons.remove_red_eye)),
-                                )),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10),
-                                child: Neumorph(
-                                    child: ListTile(
-                                  title: TextFormField(
-                                    textAlignVertical: TextAlignVertical.center,
-                                    decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: 'MetaMask Address',
-                                      hintStyle: mbodytext,
-                                      prefixIcon: Icon(
-                                        Icons.wallet,
-                                        color: Colors.purple[100],
-                                      ),
-                                    ),
-                                    validator: (val) =>
-                                        val!.isEmpty ? 'Email required' : null,
-                                    onChanged: (val) {
-                                      //email string is assigned to val for validation process
-                                      setState(() => wallet = val);
-                                    },
-                                    controller: _wallet,
-                                    keyboardType: TextInputType.emailAddress,
-                                    textInputAction: TextInputAction.done,
-                                  ),
                                 )),
                               ),
                               Row(
