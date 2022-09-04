@@ -22,6 +22,7 @@ class _PlaylistLayoutState extends State<PlaylistLayout> {
         ),
       ),
       Scaffold(
+        backgroundColor: Colors.transparent,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,

@@ -8,7 +8,6 @@ import 'package:muse/screens/home/home.dart';
 class UserManagement {
   User? currentUser = FirebaseAuth.instance.currentUser;
   directHomepage(BuildContext context) {
-    
     return FirebaseFirestore.instance
         .collection('/users')
         .doc(currentUser!.uid)
@@ -22,9 +21,11 @@ class UserManagement {
           Navigator.of(context).push(new MaterialPageRoute(
               builder: (BuildContext context) => new Home()));
         }
+      } else {
+        return Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        );
       }
     });
   }
-
-    
 }

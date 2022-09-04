@@ -24,7 +24,7 @@ class MusicRoom extends StatefulWidget {
 
 class _MusicRoomState extends State<MusicRoom> {
   final audioPlayer = AudioPlayer();
-  bool isPlaying = false;
+  bool isPlaying = true;
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
 
@@ -33,6 +33,7 @@ class _MusicRoomState extends State<MusicRoom> {
     super.initState();
 
     setAudio();
+    
 
     //Listen for song state
     audioPlayer.onPlayerStateChanged.listen((state) {

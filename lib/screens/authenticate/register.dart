@@ -1,3 +1,5 @@
+import 'dart:math';
+import 'package:web3dart/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:muse/screens/authenticate/signin.dart';
 import 'package:muse/screens/home/musicroom.dart';
@@ -6,7 +8,8 @@ import 'package:muse/tools/customfont.dart';
 import 'package:muse/tools/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:web3dart/web3dart.dart';
+import 'package:http/http.dart';
 import '../../services/usermanagement.dart';
 
 class Register extends StatefulWidget {
@@ -17,24 +20,29 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
+  var apiUrl = "https://ropsten.infura.io/v3/39d2d450a3c44b9d85775471d60cd2e0";
+  var httpClient = Client();
   //create firebase auth instance variable
   FirebaseAuth auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
   //Text editing controller will be used for authentication purposes
   TextEditingController _email = TextEditingController();
+  TextEditingController _cryptowallet = TextEditingController();
   TextEditingController _username = TextEditingController();
   TextEditingController _password = TextEditingController();
   //String values will be used for validation process
   String email = "";
   String username = "";
   String password = "";
-  String wallet = "";
+
   //radio button selection
   String role = '';
+  String trueForm = '';
 
   bool hidePassword = true;
   @override
   Widget build(BuildContext context) {
+    var ethClient = Web3Client(apiUrl, httpClient);
     return Stack(
       children: [
         BackgroundImage(
@@ -82,7 +90,7 @@ class _RegisterState extends State<Register> {
                                       hintText: 'Username',
                                       hintStyle: mbodytext,
                                       prefixIcon: Icon(
-                                        Icons.mail,
+                                        Icons.person,
                                         color: Colors.purple[100],
                                       ),
                                     ),
@@ -170,35 +178,76 @@ class _RegisterState extends State<Register> {
                                       icon: Icon(Icons.remove_red_eye)),
                                 )),
                               ),
+                              role == 'artist' ? Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 10),
+                                child: Neumorph(
+                                    child: ListTile(
+                                  title: TextFormField(
+                                    textAlignVertical: TextAlignVertical.center,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: 'CryptoWallet Address',
+                                      hintStyle: mbodytext,
+                                      prefixIcon: Icon(
+                                        Icons.mail,
+                                        color: Colors.purple[100],
+                                      ),
+                                    ),
+                                    // validator: (val) =>
+                                    //     val!.isEmpty ? 'Email required' : null,
+                                    // onChanged: (val) {
+                                    //   //email string is assigned to val for validation process
+                                    //   setState(() => email = val);
+                                    // },
+                                    controller: _cryptowallet,
+                                    keyboardType: TextInputType.emailAddress,
+                                    textInputAction: TextInputAction.next,
+                                  ),
+                                )),
+                              ): Text(''),
                               Row(
                                 children: [
-                                  Radio(value:'streamer', groupValue: role, onChanged: (value){
-                                    setState(() {
-                                      role = value as String;
-                                    } );
-                                  },
-                                  fillColor: MaterialStateProperty.resolveWith(getColor)),
+                                  Radio(
+                                      value: 'streamer',
+                                      groupValue: role,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          role = value as String;
+                                        });
+                                      },
+                                      fillColor:
+                                          MaterialStateProperty.resolveWith(
+                                              getColor)),
                                   SizedBox(
                                     width: 10,
                                   ),
-                                  Text('Register as a streamer',
-                                  style: mbodytext,)
+                                  Text(
+                                    'Register as a streamer',
+                                    style: mbodytext,
+                                  )
                                 ],
                               ),
                               Row(
                                 children: [
-                                  Radio(value: 'artist'
-                                  , groupValue: role, onChanged: (value){
-                                    setState(() {
-                                      role = value as String;
-                                    } );
-                                  },
-                                  fillColor: MaterialStateProperty.resolveWith(getColor)),
+                                  Radio(
+                                      value: 'artist',
+                                      groupValue: role,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          role = value as String;
+                                        });
+                                      },
+                                      fillColor:
+                                          MaterialStateProperty.resolveWith(
+                                              getColor)),
                                   SizedBox(
                                     width: 10,
                                   ),
-                                  Text('Register as an artist',
-                                  style: mbodytext,)
+                                  Text(
+                                    'Register as an artist',
+                                    style: mbodytext,
+                                  )
                                 ],
                               ),
                               SizedBox(
@@ -243,18 +292,32 @@ class _RegisterState extends State<Register> {
                                           .createUserWithEmailAndPassword(
                                               email: _email.text,
                                               password: _password.text);
-                                              print('user created');
+                                      print('user created');
+                                      //create private key for user wallet
+                                      if (role == 'streamer'){
+                                        trueForm = revealPrivateKey();
+                                        await UserRegistrationService(
+                                        uid: userCredential.user!.uid,
+                                      ).createUser(
+                                       name : _username.text,
+                                       email: _email.text,
+                                        role: role,
+                                        wallet: trueForm,
+                                      );
+                                    }else{
                                       await UserRegistrationService(
                                         uid: userCredential.user!.uid,
                                       ).createUser(
-                                        _username.text,
-                                        _email.text,
-                                        role,
-                                        _wallet.text,
+                                       name : _username.text,
+                                       email: _email.text,
+                                        role: role,
+                                        address: _cryptowallet.text,
                                       );
+                                    } 
                                       print('data added');
                                       //navigate to hompepage
-                                       await UserManagement().directHomepage(context);
+                                      await UserManagement()
+                                          .directHomepage(context);
                                       // Navigator.push(
                                       //     context,
                                       //     MaterialPageRoute(
@@ -277,7 +340,23 @@ class _RegisterState extends State<Register> {
                                 },
                                 child: Text('Next', style: mbodytext),
                               ),
-                            )
+                            ),
+                            Container(
+                                child: TextButton(
+                                    onPressed: ()async {
+                                      print('ppd: $revealPrivateKey()');
+                                      var credentials =
+                                          EthPrivateKey.fromHex(revealPrivateKey());
+
+                                      print('got key');
+                                      final address = credentials.address;
+                                      print(address.hexEip55);
+                                       String disBal =(await ethClient
+                                          .getBalance(address))
+                                          .toString();
+                                          print(disBal);
+                                    },
+                                    child: Text('Debug')))
                           ],
                         )
                       ],
@@ -294,5 +373,14 @@ class _RegisterState extends State<Register> {
 }
 
 Color getColor(Set<MaterialState> states) {
-    return Colors.white;
+  return Colors.white;
+}
+
+String revealPrivateKey() {
+  var randomNumber = Random.secure();
+  EthPrivateKey key = EthPrivateKey.createRandom(randomNumber);
+  print(key);
+  String s = bytesToHex(key.privateKey);
+  print('gen: $s');
+  return s;
 }

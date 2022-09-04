@@ -7,7 +7,7 @@ class UserRegistrationService {
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<void> createUser(String name, String email, String role, String wallet) {
+  Future<void> createUser({required String name, required String email, required String role, String? wallet, String? address}) {
     var id = Uuid();
     String userId = id.v1();
 
@@ -19,7 +19,8 @@ class UserRegistrationService {
           'username': name,
           'email': email,
           'role': role,
-          'MetaMask Address': wallet,
+          'muse private key': wallet,
+          'cryptowallet address': address,
         })
         .then((value) => print('User added'))
         .catchError((error) => print('Failed to add user'));
