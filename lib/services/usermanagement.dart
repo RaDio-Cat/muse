@@ -6,20 +6,21 @@ import 'package:muse/screens/home/artist/artisthome.dart';
 import 'package:muse/screens/home/home.dart';
 
 class UserManagement {
+  
   User? currentUser = FirebaseAuth.instance.currentUser;
-  directHomepage(BuildContext context) {
-    return FirebaseFirestore.instance
+  directHomepage(BuildContext context) async {
+    await FirebaseFirestore.instance
         .collection('/users')
         .doc(currentUser!.uid)
         .get()
         .then((snapshot) {
       if (snapshot.exists) {
         if (snapshot.data()!['role'] == 'artist') {
-          Navigator.of(context).push(new MaterialPageRoute(
-              builder: (BuildContext context) => new ArtistHome()));
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (BuildContext context) =>  ArtistHome()));
         } else {
-          Navigator.of(context).push(new MaterialPageRoute(
-              builder: (BuildContext context) => new Home()));
+          Navigator.of(context).push( MaterialPageRoute(
+              builder: (BuildContext context) =>  Home()));
         }
       } else {
         return Scaffold(

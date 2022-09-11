@@ -12,6 +12,7 @@ import 'package:web3dart/web3dart.dart';
 import 'package:http/http.dart';
 import '../../services/usermanagement.dart';
 
+
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
 
@@ -20,7 +21,7 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  var apiUrl = "https://ropsten.infura.io/v3/39d2d450a3c44b9d85775471d60cd2e0";
+  var apiUrl = "http://127.0.0.1:7545";
   var httpClient = Client();
   //create firebase auth instance variable
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -378,9 +379,13 @@ Color getColor(Set<MaterialState> states) {
 
 String revealPrivateKey() {
   var randomNumber = Random.secure();
+  print(randomNumber);
   EthPrivateKey key = EthPrivateKey.createRandom(randomNumber);
   print(key);
-  String s = bytesToHex(key.privateKey);
+   String s = bytesToHex(key.privateKey);
+  if (s.length > 64) {
+    s = s.substring(2);
+  }
   print('gen: $s');
   return s;
 }

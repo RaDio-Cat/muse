@@ -5,6 +5,7 @@ import 'package:muse/tools/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:audioplayers/audioplayers.dart';
 
+
 class MusicRoom extends StatefulWidget {
   final thumbnail;
   final songname;
@@ -158,12 +159,12 @@ class _MusicRoomState extends State<MusicRoom> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('0:00',
-                                style: mbodytext,),
-                                Text('3:43',
-                                style: mbodytext,),
-                                // Text(formatTime(position)),
-                                // Text(formatTime(duration - position)),
+                                // Text('0:00',
+                                // style: mbodytext,),
+                                // Text('3:43',
+                                // style: mbodytext,),
+                                 Text(position.inMinutes.toString()),
+                                Text(duration.inMinutes.toString()),
                               ],
                             ),
                           ],

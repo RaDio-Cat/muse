@@ -3,9 +3,10 @@ import 'dart:ffi';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:muse/screens/home/home.dart';
-import 'package:web3dart/web3dart.dart';
+import 'package:web3dart/web3dart.dart' as web3;
 import 'package:web3dart/crypto.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -26,19 +27,23 @@ class _WalletState extends State<Wallet> {
 
   var apiUrl = "https://ropsten.infura.io/v3/39d2d450a3c44b9d85775471d60cd2e0";
   Client? httpClient;
-  // Web3Client? ethClient;
+  web3.Web3Client? ethClient;
   // final metaAddress = '0xF91456cA9218ACab1a216a3C8DCfA0E40da8c8f3';
   String privatKey = '';
-  String disBal = '';
+   web3.EtherAmount disBal = web3.EtherAmount.zero();
   String wallAddress = '';
-  String staticKey =
-      '2dc30b5f18ae9d6c79cc3aae2a072c198bf0c7e0b9e0c52bd9ee1e66e27721b9';
+  String balance = '';
+  String txnHash = '';
+  String contractAddress = '0x2cC6df2d674452A54f68d7960fC64A380bc38ad3';
 
   @override
   void initState() {
-    super.initState();
 
     httpClient = Client();
+    ethClient = web3.Web3Client(apiUrl, httpClient!);
+    
+    super.initState();
+
   }
 
   @override
@@ -78,72 +83,104 @@ class _WalletState extends State<Wallet> {
           ),
           body: SingleChildScrollView(
             child: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Container(
-                  padding: EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20)),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Container(
+                      padding: EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Column(
                         children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 20.0),
+                                child: Text(
+                                  'Balance',
+                                  style: TextStyle(fontSize: 30),
+                                ),
+                              ),
+                            ],
+                          ),
+                          FutureBuilder(
+                              future: getAccBalance(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.done) {
+                                  return Text(balance);
+                                } else {
+                                  return CircularProgressIndicator();
+                                }
+                              }),
                           Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 20.0),
-                            child: Text(
-                              'Balance',
-                              style: TextStyle(fontSize: 30),
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              //width: double.infinity,
+                              decoration: BoxDecoration(
+                                  color: Colors.teal,
+                                  borderRadius:
+                                      BorderRadiusDirectional.circular(25)),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5.0),
+                                child: OutlinedButton(
+                                  onPressed: () {
+                                    // upload song
+                                    FlutterClipboard.copy(privatKey)
+                                        .then((value) => print('copied'));
+                                    ;
+                                    Fluttertoast.showToast(
+                                        msg: 'Copied to clipboard');
+                                    // Navigator.pop(context);
+                                  },
+                                  child: Text('Copy private key',
+                                      style: mbodytext),
+                                  style: OutlinedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(25),
+                                      ),
+                                      side: BorderSide(
+                                          width: 2, color: Colors.white)),
+                                ),
+                              ),
                             ),
                           ),
                         ],
                       ),
-                      FutureBuilder(
-                          future: getAccBalance(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.done) {
-                              return Text(disBal);
-                            } else {
-                              return CircularProgressIndicator();
-                            }
-                          }),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          //width: double.infinity,
-                          decoration: BoxDecoration(
-                              color: Colors.teal,
-                              borderRadius:
-                                  BorderRadiusDirectional.circular(25)),
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 5.0),
-                            child: OutlinedButton(
-                              onPressed: () {
-                                // upload song
-                                FlutterClipboard.copy(privatKey)
-                                    .then((value) => print('copied'));
-                                ;
-                                Fluttertoast.showToast(
-                                    msg: 'Copied to clipboard');
-                                // Navigator.pop(context);
-                               },
-                              child: Text('Copy private key', style: mbodytext),
-                              style: OutlinedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(25),
-                                  ),
-                                  side: BorderSide(
-                                      width: 2, color: Colors.white)),
-                            ),
-                          ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      //width: double.infinity,
+                      decoration: BoxDecoration(
+                          color: Colors.teal,
+                          borderRadius: BorderRadiusDirectional.circular(25)),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                        child: OutlinedButton(
+                          onPressed: () {
+                            // pay subscription
+                            payUpBro();
+
+                            // Navigator.pop(context);
+                          },
+                          child: Text('Pay Subscription', style: mbodytext),
+                          style: OutlinedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                              side: BorderSide(width: 2, color: Colors.white)),
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
           ),
@@ -170,20 +207,24 @@ class _WalletState extends State<Wallet> {
   }
 
   getAccBalance() async {
-    var ethClient = Web3Client(apiUrl, httpClient!);
     String pKey = await retrievePrivateKey();
+    privatKey = pKey;
     print('gab: $pKey');
-    var credentials = EthPrivateKey.fromHex(pKey);
-    // var credentials = EthereumAddress.fromHex(privKey);
-    print('got key');
+    var credentials = web3.EthPrivateKey.fromHex(pKey);
+    //  var cr = web3.EthereumAddress.fromHex('0x3F61Ad1CCe826046AB780588796235f9fE6f3909');
+    // print(cr.hexEip55);
     final address = credentials.address;
-    final musekey =(hexToBytes(pKey));
-    //privatKey = musekey;
-    print(privatKey);
-    wallAddress = address.hexEip55;
-    disBal = (await ethClient.getBalance(address)).toString();
-    print(disBal);
-    return disBal;
+    await ethClient!.getBalance(address).then((value) {
+      print('balance recieved');
+      disBal = value;
+    print(disBal.getValueInUnit(web3.EtherUnit.ether));
+    balance = disBal.getValueInUnit(web3.EtherUnit.ether).toString();
+    });
+    
+    return balance;
+      
+
+  
 
     // EtherAmount balance = await ethClient.getBalance(credentials.address) ;
     // print('got balance');
@@ -191,6 +232,75 @@ class _WalletState extends State<Wallet> {
     //  print('balance assigned');
     // return displayBal;
   }
+
+  testEthClient(web3.Web3Client client) async {
+    var credentials = web3.EthPrivateKey.fromHex('a30c7528829b24499ef43331402fc4b7aa661f8647550b98f25dd15b35606ee8');
+    //  var cr = web3.EthereumAddress.fromHex('0x3F61Ad1CCe826046AB780588796235f9fE6f3909');
+    // print(cr.hexEip55);
+    final address = credentials.address;
+    await client.getBalance(address).then((value) {
+      print('balance recieved');
+    
+    print(value.getValueInUnit(web3.EtherUnit.ether));
+    });
+  }
+
+  payUp() async {
+    print('tst: $privatKey');
+    web3.Credentials creds = web3.EthPrivateKey.fromHex(privatKey);
+     var result = await ethClient!.sendTransaction(
+        creds,
+        web3.Transaction(
+            to: web3.EthereumAddress.fromHex(
+                contractAddress),
+            gasPrice: web3.EtherAmount.inWei(BigInt.one),
+            maxGas: 100000,
+            value: web3.EtherAmount.fromUnitAndValue(
+                web3.EtherUnit.ether, 1)),
+                chainId: 3);
+    if (result != '') {
+      Fluttertoast.showToast(msg: result);
+    }
+  }
+
+  Future<web3.DeployedContract> loadContract() async {
+    String abi = await rootBundle.loadString("assets/museabi.json");
+    String contractAddress = "0x2cC6df2d674452A54f68d7960fC64A380bc38ad3";
+    final contract = web3.DeployedContract(web3.ContractAbi.fromJson(abi, "muse_wallet"),
+        web3.EthereumAddress.fromHex(contractAddress));
+    return contract;
+  }
+
+  Future<List<dynamic>> query(String functionName, List<dynamic> args) async {
+    final contract = await loadContract();
+    final ethfunction = contract.function(functionName);
+    final result = await ethClient!
+        .call(contract: contract, function: ethfunction, params: args);
+    return result;
+  }
+
+  Future<String> payUpBro() async {
+    var bigAmount = web3.EtherAmount.fromUnitAndValue(web3.EtherUnit.ether, 1);
+    var gasPriceu = web3.EtherAmount.fromUnitAndValue(web3.EtherUnit.wei, 20000000000);
+    var response = await submit("payup", [], bigAmount, gasPriceu);
+     print('payment made');
+     txnHash = response;
+     print(txnHash);
+      if (response != '') {
+      Fluttertoast.showToast(msg: txnHash);
+    }
+     return response;
+       }
+
+       Future<String> submit(String functionName, List<dynamic> args, web3.EtherAmount? amount,web3.EtherAmount gasPrice) async {
+        web3.EthPrivateKey creds = web3.EthPrivateKey.fromHex(privatKey);
+        web3.DeployedContract contract = await loadContract();
+        final ethfunction = contract.function(functionName);
+        final result = await ethClient!.sendTransaction(creds, web3.Transaction.callContract(contract:contract , function:ethfunction, parameters: args, value:amount, gasPrice: gasPrice),
+        chainId: 3,);
+       
+        return result;
+       }
 }
 
 //'3b94d0493278e8149f52f79f8d3c8dcba3f610ce4d8bc88f74dad5ede1552127'
