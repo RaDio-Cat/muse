@@ -20,19 +20,20 @@ class NewMusicRoom extends StatefulWidget {
   State<NewMusicRoom> createState() => _NewMusicRoomState();
 }
 
- late final PageManager _pageManager;
+ PageManager? _pageManager;
 
 class _NewMusicRoomState extends State<NewMusicRoom> {
   
   @override
   void initState() {
-    _pageManager = PageManager(selectedPlaylist: widget.selectedPlaylist );
+    if (_pageManager == null)
+    {_pageManager = PageManager(selectedPlaylist: widget.selectedPlaylist );}
      super.initState();
   }
 
   @override
   void dispose() {
-    _pageManager.dispose();
+    _pageManager!.dispose();
     super.dispose();
   }
 
@@ -165,7 +166,7 @@ class CurrentSongTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<String>(
-      valueListenable: _pageManager.currentSongTitleNotifier,
+      valueListenable: _pageManager!.currentSongTitleNotifier,
       builder: (_, title, __) {
         return Padding(
           padding: const EdgeInsets.only(top: 8.0),
@@ -181,7 +182,7 @@ class Playlist extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: ValueListenableBuilder<List<String>>(
-        valueListenable: _pageManager.playlistNotifier,
+        valueListenable: _pageManager!.playlistNotifier,
         builder: (context, playlistTitles, _) {
           return ListView.builder(
             itemCount: playlistTitles.length,
@@ -232,13 +233,13 @@ class AudioProgressBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<ProgressBarState>(
-      valueListenable: _pageManager.progressNotifier,
+      valueListenable: _pageManager!.progressNotifier,
       builder: (_, value, __) {
         return ProgressBar(
           progress: value.current,
           buffered: value.buffered,
           total: value.total,
-          onSeek: _pageManager.seek,
+          onSeek: _pageManager!.seek,
         );
       },
     );
@@ -279,7 +280,7 @@ class RepeatButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<RepeatState>(
-      valueListenable: _pageManager.repeatButtonNotifier,
+      valueListenable: _pageManager!.repeatButtonNotifier,
       builder: (context, value, child) {
         Icon icon;
         switch (value) {
@@ -295,7 +296,7 @@ class RepeatButton extends StatelessWidget {
         }
         return IconButton(
           icon: icon,
-          onPressed: _pageManager.onRepeatButtonPressed,
+          onPressed: _pageManager!.onRepeatButtonPressed,
         );
       },
     );
@@ -307,12 +308,12 @@ class PreviousSongButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<bool>(
-      valueListenable: _pageManager.isFirstSongNotifier,
+      valueListenable: _pageManager!.isFirstSongNotifier,
       builder: (_, isFirst, __) {
         return IconButton(
           icon: Icon(Icons.skip_previous),
           onPressed:
-              (isFirst) ? null : _pageManager.onPreviousSongButtonPressed,
+              (isFirst) ? null : _pageManager!.onPreviousSongButtonPressed,
         );
       },
     );
@@ -324,7 +325,7 @@ class PlayButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<ButtonState>(
-      valueListenable: _pageManager.playButtonNotifier,
+      valueListenable: _pageManager!.playButtonNotifier,
       builder: (_, value, __) {
         switch (value) {
           case ButtonState.loading:
@@ -338,13 +339,13 @@ class PlayButton extends StatelessWidget {
             return IconButton(
               icon: Icon(Icons.play_arrow),
               iconSize: 32.0,
-              onPressed: _pageManager.play,
+              onPressed: _pageManager!.play,
             );
           case ButtonState.playing:
             return IconButton(
               icon: Icon(Icons.pause),
               iconSize: 32.0,
-              onPressed: _pageManager.pause,
+              onPressed: _pageManager!.pause,
             );
         }
       },
@@ -357,11 +358,11 @@ class NextSongButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<bool>(
-      valueListenable: _pageManager.isLastSongNotifier,
+      valueListenable: _pageManager!.isLastSongNotifier,
       builder: (_, isLast, __) {
         return IconButton(
           icon: Icon(Icons.skip_next),
-          onPressed: (isLast) ? null : _pageManager.onNextSongButtonPressed,
+          onPressed: (isLast) ? null : _pageManager!.onNextSongButtonPressed,
         );
       },
     );
@@ -373,13 +374,13 @@ class ShuffleButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<bool>(
-      valueListenable: _pageManager.isShuffleModeEnabledNotifier,
+      valueListenable: _pageManager!.isShuffleModeEnabledNotifier,
       builder: (context, isEnabled, child) {
         return IconButton(
           icon: (isEnabled)
               ? Icon(Icons.shuffle)
               : Icon(Icons.shuffle, color: Colors.grey),
-          onPressed: _pageManager.onShuffleButtonPressed,
+          onPressed: _pageManager!.onShuffleButtonPressed,
         );
       },
     );

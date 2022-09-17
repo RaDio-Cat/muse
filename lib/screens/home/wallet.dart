@@ -34,7 +34,7 @@ class _WalletState extends State<Wallet> {
   String wallAddress = '';
   String balance = '';
   String txnHash = '';
-  String contractAddress = '0x2cC6df2d674452A54f68d7960fC64A380bc38ad3';
+  String contractAddress = '0xdffB63f76f69cf4Ff1736D170C109cFec88b8BBF';
 
   @override
   void initState() {
@@ -265,7 +265,7 @@ class _WalletState extends State<Wallet> {
 
   Future<web3.DeployedContract> loadContract() async {
     String abi = await rootBundle.loadString("assets/museabi.json");
-    String contractAddress = "0x2cC6df2d674452A54f68d7960fC64A380bc38ad3";
+    String contractAddress = "0xdffB63f76f69cf4Ff1736D170C109cFec88b8BBF";
     final contract = web3.DeployedContract(web3.ContractAbi.fromJson(abi, "muse_wallet"),
         web3.EthereumAddress.fromHex(contractAddress));
     return contract;

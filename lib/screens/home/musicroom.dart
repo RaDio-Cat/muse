@@ -34,6 +34,7 @@ class _MusicRoomState extends State<MusicRoom> {
     super.initState();
 
     setAudio();
+    playSong();
     
 
     //Listen for song state
@@ -58,6 +59,9 @@ class _MusicRoomState extends State<MusicRoom> {
 
   Future setAudio() async {
     audioPlayer.setSourceUrl(widget.song);
+  }
+  Future playSong()async{
+    await audioPlayer.play(widget.song);
   }
 
   @override

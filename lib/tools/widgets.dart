@@ -141,15 +141,25 @@ class _SongListState extends State<SongList> {
                     leading: data['image'],
                     onTap: () {
                       //open music room and send necessary data
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => NewMusicRoom(
+                      //             selectedPlaylist: currentPlaylist)));
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => NewMusicRoom(
-                                  selectedPlaylist: currentPlaylist)));
+                              builder: (context) => MusicRoom(
+                                thumbnail:data['image'],
+                                songname:data['name'],
+                                song: data['song'],
+                                singer:artistname,
+                                  )));
                     },
                   ),
                 );
               }).toList(),
+              
             );
           } else {
             return Center(
