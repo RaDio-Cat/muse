@@ -10,6 +10,7 @@ class UserRegistrationService {
   Future<void> createUser({required String name, required String email, required String role, String? wallet, String? address}) {
     var id = Uuid();
     String userId = id.v1();
+    bool status = false;
 
     return _firestore
         .collection('users')
@@ -21,6 +22,7 @@ class UserRegistrationService {
           'role': role,
           'muse private key': wallet,
           'cryptowallet address': address,
+          'subscribed': status
         })
         .then((value) => print('User added'))
         .catchError((error) => print('Failed to add user'));

@@ -30,7 +30,7 @@ class _WalletState extends State<Wallet> {
   web3.Web3Client? ethClient;
   // final metaAddress = '0xF91456cA9218ACab1a216a3C8DCfA0E40da8c8f3';
   String privatKey = '';
-   web3.EtherAmount disBal = web3.EtherAmount.zero();
+  web3.EtherAmount disBal = web3.EtherAmount.zero();
   String wallAddress = '';
   String balance = '';
   String txnHash = '';
@@ -38,12 +38,10 @@ class _WalletState extends State<Wallet> {
 
   @override
   void initState() {
-
     httpClient = Client();
     ethClient = web3.Web3Client(apiUrl, httpClient!);
-    
-    super.initState();
 
+    super.initState();
   }
 
   @override
@@ -217,14 +215,11 @@ class _WalletState extends State<Wallet> {
     await ethClient!.getBalance(address).then((value) {
       print('balance recieved');
       disBal = value;
-    print(disBal.getValueInUnit(web3.EtherUnit.ether));
-    balance = disBal.getValueInUnit(web3.EtherUnit.ether).toString();
+      print(disBal.getValueInUnit(web3.EtherUnit.ether));
+      balance = disBal.getValueInUnit(web3.EtherUnit.ether).toString();
     });
-    
-    return balance;
-      
 
-  
+    return balance;
 
     // EtherAmount balance = await ethClient.getBalance(credentials.address) ;
     // print('got balance');
@@ -233,40 +228,41 @@ class _WalletState extends State<Wallet> {
     // return displayBal;
   }
 
-  testEthClient(web3.Web3Client client) async {
-    var credentials = web3.EthPrivateKey.fromHex('a30c7528829b24499ef43331402fc4b7aa661f8647550b98f25dd15b35606ee8');
-    //  var cr = web3.EthereumAddress.fromHex('0x3F61Ad1CCe826046AB780588796235f9fE6f3909');
-    // print(cr.hexEip55);
-    final address = credentials.address;
-    await client.getBalance(address).then((value) {
-      print('balance recieved');
-    
-    print(value.getValueInUnit(web3.EtherUnit.ether));
-    });
-  }
+  // testEthClient(web3.Web3Client client) async {
+  //   var credentials = web3.EthPrivateKey.fromHex('a30c7528829b24499ef43331402fc4b7aa661f8647550b98f25dd15b35606ee8');
+  //   //  var cr = web3.EthereumAddress.fromHex('0x3F61Ad1CCe826046AB780588796235f9fE6f3909');
+  //   // print(cr.hexEip55);
+  //   final address = credentials.address;
+  //   await client.getBalance(address).then((value) {
+  //     print('balance recieved');
 
-  payUp() async {
-    print('tst: $privatKey');
-    web3.Credentials creds = web3.EthPrivateKey.fromHex(privatKey);
-     var result = await ethClient!.sendTransaction(
-        creds,
-        web3.Transaction(
-            to: web3.EthereumAddress.fromHex(
-                contractAddress),
-            gasPrice: web3.EtherAmount.inWei(BigInt.one),
-            maxGas: 100000,
-            value: web3.EtherAmount.fromUnitAndValue(
-                web3.EtherUnit.ether, 1)),
-                chainId: 3);
-    if (result != '') {
-      Fluttertoast.showToast(msg: result);
-    }
-  }
+  //   print(value.getValueInUnit(web3.EtherUnit.ether));
+  //   });
+  // }
+
+  // payUp() async {
+  //   print('tst: $privatKey');
+  //   web3.Credentials creds = web3.EthPrivateKey.fromHex(privatKey);
+  //    var result = await ethClient!.sendTransaction(
+  //       creds,
+  //       web3.Transaction(
+  //           to: web3.EthereumAddress.fromHex(
+  //               contractAddress),
+  //           gasPrice: web3.EtherAmount.inWei(BigInt.one),
+  //           maxGas: 100000,
+  //           value: web3.EtherAmount.fromUnitAndValue(
+  //               web3.EtherUnit.ether, 1)),
+  //               chainId: 3);
+  //   if (result != '') {
+  //     Fluttertoast.showToast(msg: result);
+  //   }
+  // }
 
   Future<web3.DeployedContract> loadContract() async {
     String abi = await rootBundle.loadString("assets/museabi.json");
     String contractAddress = "0xdffB63f76f69cf4Ff1736D170C109cFec88b8BBF";
-    final contract = web3.DeployedContract(web3.ContractAbi.fromJson(abi, "muse_wallet"),
+    final contract = web3.DeployedContract(
+        web3.ContractAbi.fromJson(abi, "muse_wallet"),
         web3.EthereumAddress.fromHex(contractAddress));
     return contract;
   }
@@ -281,26 +277,49 @@ class _WalletState extends State<Wallet> {
 
   Future<String> payUpBro() async {
     var bigAmount = web3.EtherAmount.fromUnitAndValue(web3.EtherUnit.ether, 1);
-    var gasPriceu = web3.EtherAmount.fromUnitAndValue(web3.EtherUnit.wei, 20000000000);
+    var gasPriceu =
+        web3.EtherAmount.fromUnitAndValue(web3.EtherUnit.wei, 20000000000);
     var response = await submit("payup", [], bigAmount, gasPriceu);
-     print('payment made');
-     txnHash = response;
-     print(txnHash);
-      if (response != '') {
+    //change subscription status
+    changeStatus();
+    
+    print('payment made');
+    txnHash = response;
+    print(txnHash);
+    if (response != '') {
       Fluttertoast.showToast(msg: txnHash);
     }
-     return response;
-       }
+    return response;
+  }
 
-       Future<String> submit(String functionName, List<dynamic> args, web3.EtherAmount? amount,web3.EtherAmount gasPrice) async {
-        web3.EthPrivateKey creds = web3.EthPrivateKey.fromHex(privatKey);
-        web3.DeployedContract contract = await loadContract();
-        final ethfunction = contract.function(functionName);
-        final result = await ethClient!.sendTransaction(creds, web3.Transaction.callContract(contract:contract , function:ethfunction, parameters: args, value:amount, gasPrice: gasPrice),
-        chainId: 3,);
-       
-        return result;
-       }
+  Future<String> submit(String functionName, List<dynamic> args,
+      web3.EtherAmount? amount, web3.EtherAmount gasPrice) async {
+    web3.EthPrivateKey creds = web3.EthPrivateKey.fromHex(privatKey);
+    web3.DeployedContract contract = await loadContract();
+    final ethfunction = contract.function(functionName);
+    final result = await ethClient!.sendTransaction(
+      creds,
+      web3.Transaction.callContract(
+          contract: contract,
+          function: ethfunction,
+          parameters: args,
+          value: amount,
+          gasPrice: gasPrice),
+      chainId: 3,
+    );
+
+    return result;
+  }
+
+  changeStatus()async{
+    await FirebaseFirestore.instance
+    .collection('users')
+    .doc(currentUser!.uid)
+    .update({'subscribed':true})
+    .then((value) => print("User Updated"))
+    .catchError((error) => print("Failed to update user: $error"));
+    print('subscription payed');
+  }
 }
 
 //'3b94d0493278e8149f52f79f8d3c8dcba3f610ce4d8bc88f74dad5ede1552127'

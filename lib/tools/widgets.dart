@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:muse/screens/home/musicroom.dart';
 import 'package:muse/screens/home/newmusicroom.dart';
 import 'package:muse/services/usermanagement.dart';
@@ -94,6 +96,8 @@ class SongList extends StatefulWidget {
 
 class _SongListState extends State<SongList> {
   String artistname = '';
+  bool status = false;
+  User? currentUser = FirebaseAuth.instance.currentUser;
   final Stream<QuerySnapshot> _songStream =
       FirebaseFirestore.instance.collection('tracks').snapshots();
 
@@ -139,14 +143,16 @@ class _SongListState extends State<SongList> {
                           }
                         }),
                     leading: data['image'],
-                    onTap: () {
+                    onTap: () async {
                       //open music room and send necessary data
                       // Navigator.push(
                       //     context,
                       //     MaterialPageRoute(
                       //         builder: (context) => NewMusicRoom(
                       //             selectedPlaylist: currentPlaylist)));
-                      Navigator.push(
+                      status = await checkSubscriptionStatus();
+                      if (status){
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => MusicRoom(
@@ -155,6 +161,9 @@ class _SongListState extends State<SongList> {
                                 song: data['song'],
                                 singer:artistname,
                                   )));
+                      }else{
+                        Fluttertoast.showToast(msg: 'Subscription Unpaid');
+                      }
                     },
                   ),
                 );
@@ -182,6 +191,22 @@ class _SongListState extends State<SongList> {
         return null;
       }
     });
+  }
+
+  checkSubscriptionStatus() async {
+    bool? stats;
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(currentUser!.uid)
+        .get()
+        .then((snapshot) {
+      if (snapshot.exists) {
+        stats = snapshot.data()!['subscribed'];
+      } else {
+        print('unable to check subscription status');
+      }
+    });
+    return stats;
   }
 }
 

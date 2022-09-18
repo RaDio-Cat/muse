@@ -21,7 +21,7 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  var apiUrl = "http://127.0.0.1:7545";
+  var apiUrl = "https://ropsten.infura.io/v3/39d2d450a3c44b9d85775471d60cd2e0";
   var httpClient = Client();
   //create firebase auth instance variable
   FirebaseAuth auth = FirebaseAuth.instance;
