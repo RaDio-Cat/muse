@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:muse/screens/home/musicroom.dart';
 import 'package:muse/screens/home/newmusicroom.dart';
+import 'package:muse/screens/home/secondmr.dart';
 import 'package:muse/services/usermanagement.dart';
 import 'dart:math';
 
@@ -122,11 +123,12 @@ class _SongListState extends State<SongList> {
                 Map<String, dynamic> data =
                     document.data()! as Map<String, dynamic>;
                 String royal = data['royalty holder'];
-                List<DocumentSnapshot> currentPlaylist = [];
-                for (int i = 0; i < snapshot.data!.docs.length; i++) {
-                  DocumentSnapshot snap = snapshot.data!.docs[i];
-                  currentPlaylist.add(snap);
-                }
+                List<DocumentSnapshot> currentPlaylist;
+                currentPlaylist = snapshot.data!.docs;
+                // for (int i = 0; i < snapshot.data!.docs.length; i++) {
+                //   DocumentSnapshot snap = snapshot.data!.docs[i];
+                //   currentPlaylist.add(snap);
+                // }
                 // final singer = UserManagement().retrieveArtistName(royalty: royal).toString();
                 return Card(
                   color: Colors.grey[200],
@@ -145,6 +147,7 @@ class _SongListState extends State<SongList> {
                     leading: data['image'],
                     onTap: () async {
                       //open music room and send necessary data
+                      // print(currentPlaylist.toString());
                       // Navigator.push(
                       //     context,
                       //     MaterialPageRoute(
@@ -155,11 +158,12 @@ class _SongListState extends State<SongList> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => MusicRoom(
+                              builder: (context) => SmusicRoom(
                                 thumbnail:data['image'],
                                 songname:data['name'],
                                 song: data['song'],
                                 singer:artistname,
+                                artistId: data['royalty holder'],
                                   )));
                       }else{
                         Fluttertoast.showToast(msg: 'Subscription Unpaid');

@@ -18,6 +18,7 @@ class PageManager {
 
   late AudioPlayer _audioPlayer;
   late ConcatenatingAudioSource _playlist;
+  var fireplay;
 
   PageManager({required this.selectedPlaylist}) {
     _init();
@@ -49,10 +50,17 @@ class PageManager {
   }
 
   void _setFirebasePlaylist() async {
-    _playlist = ConcatenatingAudioSource(children: selectedPlaylist.map((song) {
-      AudioSource.uri(Uri.parse(song['song']), tag: AudioMetadata(title: song['name'], artwork: song['image'],));
+    print(selectedPlaylist.toString());
+    fireplay = ConcatenatingAudioSource(children: []);
+    fireplay.addAll(selectedPlaylist.map((song){
+      AudioSource.uri(Uri.parse(song['song']),
+      tag: AudioMetadata(title: song['name'], artwork: song['image']));
     }).toList());
-    await _audioPlayer.setAudioSource(_playlist);
+        // fireplay = ConcatenatingAudioSource(children: selectedPlaylist.map((song) {
+    //   AudioSource.uri(Uri.parse(song['song']), tag: AudioMetadata(title: song['name'], artwork: song['image'],));
+    // }).toList());
+    await _audioPlayer.setAudioSource(fireplay);
+    print('playlist set');
   }
 
   void _listenForChangesInPlayerState() {

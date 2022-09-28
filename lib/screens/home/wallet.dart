@@ -46,11 +46,6 @@ class _WalletState extends State<Wallet> {
 
   @override
   Widget build(BuildContext context) {
-    // var ethClient = Web3Client(apiUrl, httpClient!);
-    // var credentials = EthPrivateKey.fromHex('3b94d0493278e8149f52f79f8d3c8dcba3f610ce4d8bc88f74dad5ede1552127');
-    // EtherAmount balance = ethClient.getBalance(credentials.address) as EtherAmount;
-    // String display_bal = balance.getValueInUnit(EtherUnit.ether).toString();
-    // print(display_bal);
 
     return Stack(
       children: [
@@ -149,7 +144,7 @@ class _WalletState extends State<Wallet> {
                             ),
                           ),
                         ],
-                      ),
+                      ), 
                     ),
                   ),
                   Padding(
@@ -209,8 +204,7 @@ class _WalletState extends State<Wallet> {
     privatKey = pKey;
     print('gab: $pKey');
     var credentials = web3.EthPrivateKey.fromHex(pKey);
-    //  var cr = web3.EthereumAddress.fromHex('0x3F61Ad1CCe826046AB780588796235f9fE6f3909');
-    // print(cr.hexEip55);
+    
     final address = credentials.address;
     await ethClient!.getBalance(address).then((value) {
       print('balance recieved');
@@ -221,42 +215,10 @@ class _WalletState extends State<Wallet> {
 
     return balance;
 
-    // EtherAmount balance = await ethClient.getBalance(credentials.address) ;
-    // print('got balance');
-    //  displayBal = balance.getValueInUnit(EtherUnit.ether).toStringAsFixed(2);
-    //  print('balance assigned');
-    // return displayBal;
+    
   }
 
-  // testEthClient(web3.Web3Client client) async {
-  //   var credentials = web3.EthPrivateKey.fromHex('a30c7528829b24499ef43331402fc4b7aa661f8647550b98f25dd15b35606ee8');
-  //   //  var cr = web3.EthereumAddress.fromHex('0x3F61Ad1CCe826046AB780588796235f9fE6f3909');
-  //   // print(cr.hexEip55);
-  //   final address = credentials.address;
-  //   await client.getBalance(address).then((value) {
-  //     print('balance recieved');
-
-  //   print(value.getValueInUnit(web3.EtherUnit.ether));
-  //   });
-  // }
-
-  // payUp() async {
-  //   print('tst: $privatKey');
-  //   web3.Credentials creds = web3.EthPrivateKey.fromHex(privatKey);
-  //    var result = await ethClient!.sendTransaction(
-  //       creds,
-  //       web3.Transaction(
-  //           to: web3.EthereumAddress.fromHex(
-  //               contractAddress),
-  //           gasPrice: web3.EtherAmount.inWei(BigInt.one),
-  //           maxGas: 100000,
-  //           value: web3.EtherAmount.fromUnitAndValue(
-  //               web3.EtherUnit.ether, 1)),
-  //               chainId: 3);
-  //   if (result != '') {
-  //     Fluttertoast.showToast(msg: result);
-  //   }
-  // }
+ 
 
   Future<web3.DeployedContract> loadContract() async {
     String abi = await rootBundle.loadString("assets/museabi.json");
@@ -322,5 +284,5 @@ class _WalletState extends State<Wallet> {
   }
 }
 
-//'3b94d0493278e8149f52f79f8d3c8dcba3f610ce4d8bc88f74dad5ede1552127'
+
 

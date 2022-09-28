@@ -13,7 +13,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 
 class NewMusicRoom extends StatefulWidget {
-  final selectedPlaylist;
+  final List selectedPlaylist;
   const NewMusicRoom({Key? key, required this.selectedPlaylist}) : super(key: key);
 
   @override
@@ -26,8 +26,7 @@ class _NewMusicRoomState extends State<NewMusicRoom> {
   
   @override
   void initState() {
-    if (_pageManager == null)
-    {_pageManager = PageManager(selectedPlaylist: widget.selectedPlaylist );}
+    _pageManager ??= PageManager(selectedPlaylist: widget.selectedPlaylist );
      super.initState();
   }
 

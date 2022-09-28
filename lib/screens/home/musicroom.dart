@@ -34,7 +34,7 @@ class _MusicRoomState extends State<MusicRoom> {
     super.initState();
 
     setAudio();
-    playSong();
+    //playSong();
     
 
     //Listen for song state
