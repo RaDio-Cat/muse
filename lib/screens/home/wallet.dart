@@ -46,7 +46,6 @@ class _WalletState extends State<Wallet> {
 
   @override
   Widget build(BuildContext context) {
-
     return Stack(
       children: [
         Container(
@@ -83,7 +82,7 @@ class _WalletState extends State<Wallet> {
                     child: Container(
                       padding: EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: Colors.amberAccent,
                           borderRadius: BorderRadius.circular(20)),
                       child: Column(
                         children: [
@@ -105,7 +104,7 @@ class _WalletState extends State<Wallet> {
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.done) {
-                                  return Text(balance);
+                                  return Text(balance, style: TextStyle(fontSize: 20),);
                                 } else {
                                   return CircularProgressIndicator();
                                 }
@@ -144,7 +143,40 @@ class _WalletState extends State<Wallet> {
                             ),
                           ),
                         ],
-                      ), 
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Container(
+                      padding: EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadiusDirectional.circular(12)),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                'Directions',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 20),
+                              )
+                            ],
+                          ),
+                          Container(
+                            // width: 500,
+                            // height: 55,
+                            padding: const EdgeInsets.all(10),
+                            child: const Text(
+                              "*Tap on the 'Copy private key' to copy your muse wallet private key. \n\n*Open Metamask and import the muse wallet using the private key you copied. \n\n*Populate the muse wallet with ether. The subscription fee is 1ETH \nOnce the muse transaction is a success you will see the balance reflected above. \n\n*You can now pay the subscription fee by taping 'Pay Subscription'. \n\n*Enjoy",
+                              overflow: TextOverflow.clip,
+                              style: TextStyle(fontSize: 15,
+                              wordSpacing: 3),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   Padding(
@@ -204,7 +236,7 @@ class _WalletState extends State<Wallet> {
     privatKey = pKey;
     print('gab: $pKey');
     var credentials = web3.EthPrivateKey.fromHex(pKey);
-    
+
     final address = credentials.address;
     await ethClient!.getBalance(address).then((value) {
       print('balance recieved');
@@ -214,11 +246,7 @@ class _WalletState extends State<Wallet> {
     });
 
     return balance;
-
-    
   }
-
- 
 
   Future<web3.DeployedContract> loadContract() async {
     String abi = await rootBundle.loadString("assets/museabi.json");
@@ -244,7 +272,7 @@ class _WalletState extends State<Wallet> {
     var response = await submit("payup", [], bigAmount, gasPriceu);
     //change subscription status
     changeStatus();
-    
+
     print('payment made');
     txnHash = response;
     print(txnHash);
@@ -273,16 +301,13 @@ class _WalletState extends State<Wallet> {
     return result;
   }
 
-  changeStatus()async{
+  changeStatus() async {
     await FirebaseFirestore.instance
-    .collection('users')
-    .doc(currentUser!.uid)
-    .update({'subscribed':true})
-    .then((value) => print("User Updated"))
-    .catchError((error) => print("Failed to update user: $error"));
+        .collection('users')
+        .doc(currentUser!.uid)
+        .update({'subscribed': true})
+        .then((value) => print("User Updated"))
+        .catchError((error) => print("Failed to update user: $error"));
     print('subscription payed');
   }
 }
-
-
-

@@ -95,22 +95,25 @@ class Home extends StatelessWidget {
                 Expanded(
                     child: MaterialButton(
                   onPressed: () {
-                    
-                  },
-                  child: Icon(
-                    Icons.playlist_add,
-                    color: Colors.white,
-                  ),
-                )),
-                Expanded(
-                    child: MaterialButton(
-                  onPressed: () {
                     //go to user wallet
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => Wallet()));
                   },
                   child: Icon(
                     Icons.wallet,
+                    color: Colors.white,
+                  ),
+                )),
+                Expanded(
+                    child: MaterialButton(
+                  onPressed: () async {
+                    await FirebaseAuth.instance.signOut();
+                  print('user logged out');
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => IntroPage()));
+                  },
+                  child: Icon(
+                    Icons.logout,
                     color: Colors.white,
                   ),
                 )),

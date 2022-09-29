@@ -29,4 +29,20 @@ class UserManagement {
       }
     });
   }
+
+  checkSubscriptionStatus() async {
+    bool? stats;
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(currentUser!.uid)
+        .get()
+        .then((snapshot) {
+      if (snapshot.exists) {
+        stats = snapshot.data()!['subscribed'];
+      } else {
+        print('unable to check subscription status');
+      }
+    });
+    return stats;
+  }
 }

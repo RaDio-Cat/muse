@@ -153,7 +153,7 @@ class _SongListState extends State<SongList> {
                       //     MaterialPageRoute(
                       //         builder: (context) => NewMusicRoom(
                       //             selectedPlaylist: currentPlaylist)));
-                      status = await checkSubscriptionStatus();
+                      status = await UserManagement().checkSubscriptionStatus();
                       if (status){
                         Navigator.push(
                           context,
@@ -197,21 +197,7 @@ class _SongListState extends State<SongList> {
     });
   }
 
-  checkSubscriptionStatus() async {
-    bool? stats;
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(currentUser!.uid)
-        .get()
-        .then((snapshot) {
-      if (snapshot.exists) {
-        stats = snapshot.data()!['subscribed'];
-      } else {
-        print('unable to check subscription status');
-      }
-    });
-    return stats;
-  }
+  
 }
 
 class MyCustomListTile extends StatelessWidget {
@@ -360,6 +346,7 @@ class GenreList extends StatefulWidget {
 
 class _GenreListState extends State<GenreList> {
   String artistname = '';
+  bool status = false;
 
   @override
   Widget build(BuildContext context) {
@@ -431,17 +418,23 @@ class _GenreListState extends State<GenreList> {
                                   }
                                 }),
                             leading: data['image'],
-                            onTap: () {
+                            onTap: () async {
                               //open music room and send necessary data
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => MusicRoom(
-                                            singer: artistname,
-                                            song: data['song'],
-                                            songname: data['name'],
-                                            thumbnail: data['image'],
-                                          )));
+                              status = await UserManagement().checkSubscriptionStatus();
+                      if (status){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SmusicRoom(
+                                thumbnail:data['image'],
+                                songname:data['name'],
+                                song: data['song'],
+                                singer:artistname,
+                                artistId: data['royalty holder'],
+                                  )));
+                      }else{
+                        Fluttertoast.showToast(msg: 'Subscription Unpaid');
+                      }
                             },
                           ),
                         );
