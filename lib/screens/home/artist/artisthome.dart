@@ -35,8 +35,14 @@ class _ArtistHomeState extends State<ArtistHome> {
           extendBodyBehindAppBar: true,
           backgroundColor: Colors.transparent,
           appBar: AppBar(
-            leading:
-                InkWell(onTap: () async {}, child: Icon(Icons.arrow_back_ios)),
+            leading: InkWell(
+                onTap: () async {
+                  await FirebaseAuth.instance.signOut();
+                  print('user logged out');
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => IntroPage()));
+                },
+                child: Icon(Icons.arrow_back_ios)),
             backgroundColor: Colors.transparent,
             title: Text(
               'Home',
@@ -71,7 +77,8 @@ class _ArtistHomeState extends State<ArtistHome> {
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20)),
                                 child: GridTile(
-                                  child: Image.asset('lib/images/billie.jpeg'),
+                                  child: Image.asset(
+                                      'lib/images/manage_songs.jpg'),
                                   footer: Container(
                                     height: 50,
                                     color: Colors.transparent,
@@ -104,7 +111,7 @@ class _ArtistHomeState extends State<ArtistHome> {
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20)),
                                 child: GridTile(
-                                  child: Image.asset('lib/images/billie.jpeg'),
+                                  child: Image.asset('lib/images/upload_songs.jpeg'),
                                   footer: Container(
                                     height: 50,
                                     color: Colors.transparent,
@@ -132,13 +139,13 @@ class _ArtistHomeState extends State<ArtistHome> {
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20)),
                                 child: GridTile(
-                                  child: Image.asset('lib/images/billie.jpeg'),
+                                  child: Image.asset('lib/images/money.jpg'),
                                   footer: Container(
                                     height: 50,
                                     color: Colors.transparent,
                                     child: Center(
                                       child: Text(
-                                        'Wallet',
+                                        'Transactions',
                                         style: TextStyle(
                                             fontSize: 20,
                                             fontWeight: FontWeight.bold),
@@ -160,7 +167,7 @@ class _ArtistHomeState extends State<ArtistHome> {
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20)),
                                 child: GridTile(
-                                  child: Image.asset('lib/images/billie.jpeg'),
+                                  child: Image.asset('lib/images/musician.jpeg'),
                                   footer: Container(
                                     height: 50,
                                     color: Colors.transparent,
@@ -177,40 +184,7 @@ class _ArtistHomeState extends State<ArtistHome> {
                               ),
                             ),
                           ),
-                          Card(
-                            elevation: 50,
-                            shadowColor: Colors.amberAccent,
-                            child: InkWell(
-                              onTap: () async {
-                                //show list of uploads
-                                await FirebaseAuth.instance.signOut();
-                                print('user logged out');
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => IntroPage()));
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20)),
-                                child: GridTile(
-                                  child: Image.asset('lib/images/billie.jpeg'),
-                                  footer: Container(
-                                    height: 50,
-                                    color: Colors.transparent,
-                                    child: Center(
-                                      child: Text(
-                                        'Manage Songs',
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
+                          
                         ]),
                   )
                 ],

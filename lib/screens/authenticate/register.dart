@@ -342,22 +342,22 @@ class _RegisterState extends State<Register> {
                                 child: Text('Next', style: mbodytext),
                               ),
                             ),
-                            Container(
-                                child: TextButton(
-                                    onPressed: ()async {
-                                      print('ppd: $revealPrivateKey()');
-                                      var credentials =
-                                          EthPrivateKey.fromHex(revealPrivateKey());
+                            // Container(
+                            //     child: TextButton(
+                            //         onPressed: ()async {
+                            //           print('ppd: $revealPrivateKey()');
+                            //           var credentials =
+                            //               EthPrivateKey.fromHex(revealPrivateKey());
 
-                                      print('got key');
-                                      final address = credentials.address;
-                                      print(address.hexEip55);
-                                       String disBal =(await ethClient
-                                          .getBalance(address))
-                                          .toString();
-                                          print(disBal);
-                                    },
-                                    child: Text('Debug')))
+                            //           print('got key');
+                            //           final address = credentials.address;
+                            //           print(address.hexEip55);
+                            //            String disBal =(await ethClient
+                            //               .getBalance(address))
+                            //               .toString();
+                            //               print(disBal);
+                            //         },
+                            //         child: Text('Debug')))
                           ],
                         )
                       ],

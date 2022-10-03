@@ -15,13 +15,13 @@ class ArtistSongs extends StatefulWidget {
 
 class _ArtistSongsState extends State<ArtistSongs> {
   User? currentUser = FirebaseAuth.instance.currentUser;
-  
+
   @override
   Widget build(BuildContext context) {
     final Stream<QuerySnapshot> _artistSongsStream = FirebaseFirestore.instance
-      .collection('tracks')
-      .where('royalty holder', isEqualTo: currentUser!.uid)
-      .snapshots();
+        .collection('tracks')
+        .where('royalty holder', isEqualTo: currentUser!.uid)
+        .snapshots();
     return Stack(
       children: [
         Container(
@@ -47,55 +47,57 @@ class _ArtistSongsState extends State<ArtistSongs> {
           body: Padding(
             padding: const EdgeInsets.all(8.0),
             child: StreamBuilder<QuerySnapshot>(
-        stream: _artistSongsStream,
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (snapshot.hasError) {
-            return Text('Trouble retrieving songs');
-            }
-            if (snapshot.connectionState == ConnectionState.waiting) {
-            return Scaffold(
-              body: Center(
-            child: CircularProgressIndicator(),
-              ),
-            );
-            }
-            if (snapshot.hasData) {
-            return ListView(
-              children: snapshot.data!.docs.map((DocumentSnapshot document) {
-            Map<String, dynamic> data =
-                document.data()! as Map<String, dynamic>;
-            // String royal = data['royalty holder'];
+                stream: _artistSongsStream,
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    return Text('Trouble retrieving songs');
+                  }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Scaffold(
+                      body: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  }
+                  if (snapshot.hasData) {
+                    return ListView(
+                      children:
+                          snapshot.data!.docs.map((DocumentSnapshot document) {
+                        Map<String, dynamic> data =
+                            document.data()! as Map<String, dynamic>;
+                        // String royal = data['royalty holder'];
 
-            // final singer = UserManagement().retrieveArtistName(royalty: royal).toString();
-            return Card(
-              color: Colors.grey[200],
-              child: ListTile(
-                title: Text(data['name']),
-                // subtitle: FutureBuilder(
-                //     future: retrieveArtistName(royalty: royal),
-                //     builder: (context, snapshot) {
-                //       if (snapshot.connectionState ==
-                //           ConnectionState.done) {
-                //         return Text(artistname);
-                //       } else {
-                //         return Text('Unknown Artist');
-                //       }
-                //     }),
-                leading: Image.network(data['image']),
-                onTap: () {
-                  //open music room and send necessary data
-                 
-                },
-              ),
-            );
-              }).toList(),
-            );
-            } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-            }
-        }),
+                        // final singer = UserManagement().retrieveArtistName(royalty: royal).toString();
+                        return Card(
+                          color: Colors.grey[200],
+                          child: ListTile(
+                            title: Text(data['name']),
+                            // subtitle: FutureBuilder(
+                            //     future: retrieveArtistName(royalty: royal),
+                            //     builder: (context, snapshot) {
+                            //       if (snapshot.connectionState ==
+                            //           ConnectionState.done) {
+                            //         return Text(artistname);
+                            //       } else {
+                            //         return Text('Unknown Artist');
+                            //       }
+                            //     }),
+                            leading: Image.network(data['image']),
+                            trailing: InkWell(child: Icon(Icons.cancel)),
+                            onTap: () {
+                              //open music room and send necessary data
+                            },
+                          ),
+                        );
+                      }).toList(),
+                    );
+                  } else {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                }),
           ),
         )
       ],

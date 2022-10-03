@@ -169,7 +169,7 @@ class _WalletState extends State<Wallet> {
                             // height: 55,
                             padding: const EdgeInsets.all(10),
                             child: const Text(
-                              "*Tap on the 'Copy private key' to copy your muse wallet private key. \n\n*Open Metamask and import the muse wallet using the private key you copied. \n\n*Populate the muse wallet with ether. The subscription fee is 1ETH \nOnce the muse transaction is a success you will see the balance reflected above. \n\n*You can now pay the subscription fee by taping 'Pay Subscription'. \n\n*Enjoy",
+                              "*Tap on the 'Copy private key' to copy your muse wallet private key. \n\n*Open Metamask and import the muse wallet using the private key you copied. \n\n*Populate the muse wallet with ether. The subscription fee is 1ETH. \n\n*Once the muse transaction is a success you will see the balance reflected above. \n\n*You can now pay the subscription fee by taping 'Pay Subscription'. \n\n*Enjoy",
                               overflow: TextOverflow.clip,
                               style: TextStyle(fontSize: 15,
                               wordSpacing: 3),

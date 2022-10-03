@@ -74,7 +74,7 @@ class Home extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Container(
-                  height: 320.0,
+                  height: 500,
                   child: SongList(),
                 ),
               )
